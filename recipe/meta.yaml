@@ -20,6 +20,8 @@ requirements:
   host:
     - pip
     - python
+    - wheel
+    - setuptools
   run:
     - python
 
@@ -49,6 +51,8 @@ about:
     It automatically chooses between a hardware-based implementation
     (using the CRC32C SSE 4.2 instruction of Intel CPUs, and the crc32* instructions on ARMv8 CPUs), 
     or a software-based one when no hardware support can be found.
+  doc_url: https://github.com/ICRAR/crc32c/blob/master/README.rst
+  dev_url: https://github.com/ICRAR/crc32c
 
 extra:
   recipe-maintainers:
