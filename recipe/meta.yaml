@@ -1,5 +1,5 @@
 {% set name = "crc32c" %}
-{% set version = "2.3.post0" %}
+{% set version = "2.7.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,33 +7,52 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 7d4b39ca6791830c4f1c053d2d8983627af702f0445535ff53d3220f35cf6ce6
+  sha256: f91b144a21eef834d64178e01982bb9179c354b3e9e5f4c803b0e5096384968c
+  skip: True  # [py<37]
 
 build:
   number: 0
-  script: '{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv '
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   build:
     - {{ compiler('c') }}
-
   host:
     - pip
     - python
+    - wheel
+    - setuptools
   run:
     - python
 
 test:
+  source_files:
+    - test
+    - pytest.ini
+    - run-tests.py
   imports:
     - crc32c
-
+  commands:
+    - pip check
+    - python -m run-tests
+  requires:
+    - pip
+    - pytest
 
 about:
   home: https://github.com/ICRAR/crc32c
-  license: GNU Lesser General Public v2 or later (LGPLv2+)
+  summary: A python package implementing the crc32c algorithm in hardware and software
+  license: LGPL-2.1-or-later
   license_family: LGPL
   license_file: LICENSE
   summary: A python package exposing the Intel SSE4.2 CRC32C instruction
+  description: | 
+    This package implements the crc32c checksum algorithm.
+    It automatically chooses between a hardware-based implementation
+    (using the CRC32C SSE 4.2 instruction of Intel CPUs, and the crc32* instructions on ARMv8 CPUs), 
+    or a software-based one when no hardware support can be found.
+  doc_url: https://github.com/ICRAR/crc32c/blob/master/README.rst
+  dev_url: https://github.com/ICRAR/crc32c
 
 extra:
   recipe-maintainers:
